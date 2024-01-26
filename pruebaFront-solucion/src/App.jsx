@@ -57,7 +57,6 @@ function App()
       const formData = new FormData();
       formData.append('file', archivoPdf);
       formData.append('titulo', tituloPdf);
-      // formData.append('path', archivoPdf);
 
       const options = {
         method: 'POST',
@@ -69,9 +68,19 @@ function App()
 
       console.log("PDF creado ", data);
 
-      setListaPdf([...listaPdf, data]);
+      const idPdf = data.file.id
+
+      // setListaPdf([...listaPdf, data]);
+
+      setListaPdf([...listaPdf, { idPdf: data.file.id, tituloPdf, url: data.file.path }])
+
+
+
+      console.log('id del pdf: ', data.file.id);
+      console.log('idPdf : ', idPdf);
+
     } catch (error) {
-      console.error(error.message);
+      console.error('Error al subir archivo PDF', error.message);
     }
   }
 
@@ -240,22 +249,24 @@ function App()
         <div>
           <ul>
             {listaPdf.map(pdf => (
-              <li key={pdf.tituloPdf}>
+              <li key={pdf.id}>
                 {pdf.tituloPdf}
-                {pdf.archivoPdf &&
+                {pdf.url &&
                   (
                     <iframe
-                      src={URLSearchParams.get(pdf.archivoPdf)}
+                      src={`http://localhost:3001/api/prueba/pdf/${pdf.id}`}
                       title={pdf.tituloPdf}
                       style={{ width: '300px', height: '300px' }}
                     />
                   )}
-                {/* <a
-                  href={URL.createObjectURL(pdf.archivoPdf)}
-                  download={pdf.tituloPdf}
+                <a
+                  href={`http://localhost:3001/api/prueba/pdf/${pdf.idPdf}`}
+                  download={`http://localhost:3001/api/prueba/pdf/${pdf.idPdf}`}
+                  target='_blank'
+                  rel='noreferrer'
                 >
                   Descargar PDF
-                </a> */}
+                </a>
               </li>
             ))}
           </ul>
