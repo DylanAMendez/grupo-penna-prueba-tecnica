@@ -278,6 +278,8 @@ function App()
                 <a
                   href={`http://localhost:3001/api/prueba/image/${l.idImagen}`}
                   download={`http://localhost:3001/api/prueba/image/${l.idImagen}`}
+                  target='_blank'
+                  rel='noreferrer'
                 >
                   Descargar Imagen
                 </a>

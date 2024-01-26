@@ -104,7 +104,7 @@ label, input
 .slideTrack
 {
   display: flex;
-  width: calc(250px * 10);
+  width: calc(250px * 1);
 }
 
 .slideTrack:hover
