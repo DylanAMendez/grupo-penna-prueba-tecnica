@@ -1,0 +1,8 @@
+
+POST http://localhost:3001/api/prueba/image
+Content-Type: application/json
+
+{
+    "titulo": "ejemplo",
+    "imagePath": "http://localhost:3001/api/prueba/image/e5a455ab-a817-4b9a-aa3b-2c194d60a795-linkedin.png"
+}

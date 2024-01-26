@@ -1,0 +1,10 @@
+
+POST http://localhost:3001/api/prueba/users 
+Content-Type: application/json
+
+{
+    "nombre": "user de prueba",
+    "apellido": "prueba user apellido",
+    "numero": "12345",
+    "fecha": "1443-02-04T00:00:00.000Z"
+}
