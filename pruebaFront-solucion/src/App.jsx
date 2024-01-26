@@ -18,6 +18,9 @@ function App()
 
   // funciones
 
+  // obtener datos de los usuarios
+  const usersURL = 'http://localhost:3001/api/prueba/users';
+
   const addNewUser = async (nombre, apellido, numero, fecha) =>
   {
     try {
@@ -72,7 +75,9 @@ function App()
 
       console.log('idPdf : ', idPdf);
 
-      setListaPdf([...listaPdf, { idPdf: data.file.id, tituloPdf, url: data.file.path }])
+      setListaPdf([...listaPdf, { idPdf: data.file.id, url: data.file.path }])
+
+      resetPdfForm();
 
     } catch (error) {
       console.error('Error al subir archivo PDF', error.message);
@@ -118,7 +123,13 @@ function App()
 
       console.log('Imagen Creada', data);
 
-      setListaImagen([...listaImagen, data]);
+      const idImagen = data.image.id;
+      const imagePath = data.image.imagePath;
+
+      console.log('ID de la imagen: ', idImagen);
+      console.log('Path imagen: ', imagePath);
+
+      setListaImagen([...listaImagen, { idImagen: data.image.id, tituloImagen, url: data.image.imagePath }]);
 
 
     } catch (error) {
@@ -147,21 +158,6 @@ function App()
     document.getElementById("numero").value = "";
     document.getElementById("fecha").value = "";
   }
-
-  // obtener datos del servidor
-  const usersURL = 'http://localhost:3001/api/prueba/users';
-
-  // const obtenerDatosUsuarios = () => 
-  // {
-  //   fetch(usersURL)
-  //     .then(res => res.json())
-  //     .then(data => console.log(data));
-
-  // }
-  // useEffect(() =>
-  // {
-  //   obtenerDatosUsuarios()
-  // }, [])
 
 
 
@@ -256,7 +252,7 @@ function App()
                   )}
                 <a
                   href={`http://localhost:3001/api/prueba/pdf/${pdf.idPdf}`}
-                  download={`http://localhost:3001/api/prueba/pdf/${pdf.idPdf}`}
+                  download={`${pdf.tituloPdf}.pdf`}
                   target='_blank'
                   rel='noreferrer'
                 >
@@ -275,13 +271,13 @@ function App()
                 {l.tituloImagen}
                 {l.tituloImagen && (
                   <img
-                    src={l.imagePath}
-                    alt={l.tituloImagen}
+                    src={`http://localhost:3001/api/prueba/image/${l.idImagen}`}
+                    alt={`${l.tituloImagen} `}
                     style={{ maxWidth: '100px', maxHeight: '100px' }} />
                 )}
                 <a
-                  href={l.imagePath}
-                  download={l.tituloImagen}
+                  href={`http://localhost:3001/api/prueba/image/${l.idImagen}`}
+                  download={`http://localhost:3001/api/prueba/image/${l.idImagen}`}
                 >
                   Descargar Imagen
                 </a>
