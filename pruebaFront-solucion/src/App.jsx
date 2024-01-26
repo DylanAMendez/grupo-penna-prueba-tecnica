@@ -70,14 +70,9 @@ function App()
 
       const idPdf = data.file.id
 
-      // setListaPdf([...listaPdf, data]);
+      console.log('idPdf : ', idPdf);
 
       setListaPdf([...listaPdf, { idPdf: data.file.id, tituloPdf, url: data.file.path }])
-
-
-
-      console.log('id del pdf: ', data.file.id);
-      console.log('idPdf : ', idPdf);
 
     } catch (error) {
       console.error('Error al subir archivo PDF', error.message);
@@ -249,13 +244,13 @@ function App()
         <div>
           <ul>
             {listaPdf.map(pdf => (
-              <li key={pdf.id}>
+              <li key={pdf.idPdf}>
                 {pdf.tituloPdf}
                 {pdf.url &&
                   (
                     <iframe
-                      src={`http://localhost:3001/api/prueba/pdf/${pdf.id}`}
-                      title={pdf.tituloPdf}
+                      src={`http://localhost:3001/api/prueba/pdf/${pdf.idPdf}`}
+                      title={`${pdf.tituloPdf} `}
                       style={{ width: '300px', height: '300px' }}
                     />
                   )}
