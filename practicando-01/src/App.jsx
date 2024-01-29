@@ -15,12 +15,12 @@ function App()
 
   const usersURL = 'http://localhost:3001/api/prueba/users'
 
-  // const obtenerDatosUsers = () => 
-  // {
-  //   fetch(usersURL)
-  //     .then(response => response.json())
-  //     .then(data => console.log(data));
-  // }
+  const obtenerDatosUsers = () => 
+  {
+    fetch(usersURL)
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }
 
   //? función agregar nuevo usuario
   const addUser = async (event) => 
@@ -120,8 +120,6 @@ function App()
 
       console.log(data);
 
-
-
       setNewPdf([...newPdf, { titulo: pdfTitulo, path: pdfPath }]);
 
       setPdfTitulo('');
@@ -154,16 +152,41 @@ function App()
   const [imageTitulo, setImageTitulo] = useState('');
   const [imagePath, setImagePath] = useState(null);
 
-  const addImage = (event) => 
-  {
-    event.preventDefault();
+  const imageURL = 'http://localhost:3001/api/prueba/image';
 
-    const imageObject = {
-      titulo: imageTitulo,
-      imagePath: imagePath,
+  const obtenerDatosImage = () => 
+  {
+    fetch(imageURL)
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }
+
+  const addImage = async (event) => 
+  {
+    try {
+      event.preventDefault();
+
+      const formData = new FormData();
+      formData.append('titulo', imageTitulo);
+      formData.append('image', imagePath);
+
+      const options =
+      {
+        method: 'POST',
+        body: formData,
+      }
+
+      const response = await fetch(imageURL, options)
+      const data = await response.json();
+
+      console.log('Imagen cargada ', data);
+
+      setNewImage([...newImage, { titulo: imageTitulo, imagePath: imagePath }]);
+
+    } catch (error) {
+      console.error('Error al subir imagen ', error);
     }
 
-    setNewImage([...newImage, imageObject]);
   }
 
   const handleImageTituloChange = (event) => 
@@ -184,7 +207,8 @@ function App()
   {
 
     // obtenerDatosUsers()
-    obtenerDatosPdf()
+    //obtenerDatosPdf()
+    obtenerDatosImage()
 
   }, [])
 
