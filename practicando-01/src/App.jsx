@@ -15,13 +15,12 @@ function App()
 
   const usersURL = 'http://localhost:3001/api/prueba/users'
 
-  //* useEffect
-  useEffect(() =>
-  {
-
-    obtenerDatosUsers()
-
-  }, [])
+  // const obtenerDatosUsers = () => 
+  // {
+  //   fetch(usersURL)
+  //     .then(response => response.json())
+  //     .then(data => console.log(data));
+  // }
 
   //? función agregar nuevo usuario
   const addUser = async (event) => 
@@ -80,33 +79,58 @@ function App()
   }
 
 
-  const obtenerDatosUsers = () => 
-  {
-    fetch(usersURL)
-      .then(response => response.json())
-      .then(data => console.log(data));
-  }
-
-
   //* NEW PDF
   const [newPdf, setNewPdf] = useState([]);
 
   const [pdfTitulo, setPdfTitulo] = useState('');
   const [pdfPath, setPdfPath] = useState(null);
 
-  const addPdf = (event) => 
-  {
-    event.preventDefault();
+  const pdfURL = 'http://localhost:3001/api/prueba/pdf'
 
-    const pdfObject = {
-      titulo: pdfTitulo,
-      path: pdfPath,
+  const obtenerDatosPdf = () => 
+  {
+    fetch(pdfURL)
+      .then(response => response.json())
+      .then(data => console.log(data));
+  }
+
+  const addPdf = async (event) => 
+  {
+    try {
+      const formData = new FormData();
+      formData.append('titulo', pdfTitulo);
+      formData.append('file', pdfPath);
+
+      event.preventDefault();
+
+      //! habilité la constante 'options' para poder enviar los datos
+      // const pdfObject = {
+      //   titulo: pdfTitulo,
+      //   path: pdfPath,
+      // }
+
+      const options =
+      {
+        method: 'POST',
+        body: formData,
+      }
+
+      const response = await fetch(pdfURL, options);
+      const data = await response.json();
+
+      console.log(data);
+
+
+
+      setNewPdf([...newPdf, { titulo: pdfTitulo, path: pdfPath }]);
+
+      setPdfTitulo('');
+      setPdfPath(null);
+
+    } catch (error) {
+      console.error('Error al subir pdf: ', error)
     }
 
-    setNewPdf([...newPdf, pdfObject]);
-
-    setPdfTitulo('');
-    setPdfPath(null);
   }
 
   const handlePdfTituloChange = (event) => 
@@ -155,6 +179,14 @@ function App()
 
   // console.log(newImage);
 
+  //* useEffect
+  useEffect(() =>
+  {
+
+    // obtenerDatosUsers()
+    obtenerDatosPdf()
+
+  }, [])
 
   return (
     <>
