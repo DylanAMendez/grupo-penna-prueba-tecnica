@@ -83,9 +83,39 @@ function App()
     setPdfPath(newPdfPath);
   }
 
-  console.log(newPdf);
-  console.log('PATH PDF: ', newPdf.map(p => p.path));
+  // console.log(newPdf);
+  // console.log('PATH PDF: ', newPdf.map(p => p.path));
 
+
+  //* NEW IMAGE
+  const [newImage, setNewImage] = useState([]);
+  const [imageTitulo, setImageTitulo] = useState('');
+  const [imagePath, setImagePath] = useState(null);
+
+  const addImage = (event) => 
+  {
+    event.preventDefault();
+
+    const imageObject = {
+      titulo: imageTitulo,
+      imagePath: imagePath,
+    }
+
+    setNewImage([...newImage, imageObject]);
+  }
+
+  const handleImageTituloChange = (event) => 
+  {
+    setImageTitulo(event.target.value);
+  }
+
+  const handleImagePathChange = (event) => 
+  {
+    const pathImage = event.target.files[0];
+    setImagePath(pathImage);
+  }
+
+  console.log(newImage);
 
   return (
     <>
@@ -123,6 +153,20 @@ function App()
         </form>
       </header>
 
+      <header>
+        <form onSubmit={addImage}>
+
+          <label>titulo:</label>
+          <input type="text" value={imageTitulo} onChange={handleImageTituloChange} name='titulo' />
+
+          <label>imagen:</label>
+          <input type="file" name='imagePath' onChange={handleImagePathChange} accept='image/*' />
+
+          <button type='submit'>enviar</button>
+
+        </form>
+      </header>
+
       {/* mostrar new user */}
       <main>
 
@@ -133,6 +177,8 @@ function App()
             ))}
           </ul>
         </div>
+
+        {/* mostrar new pdf */}
 
         <div>
           <ul>
@@ -152,6 +198,26 @@ function App()
 
               </li>
 
+            ))}
+          </ul>
+        </div>
+
+        {/* mostrar new image */}
+
+        <div>
+          <ul>
+            {newImage.map(image => (
+              <li key={image.titulo}>
+                {image.titulo}
+
+                {image.imagePath &&
+                  <img
+                    src={URL.createObjectURL(image.imagePath)}
+                    alt={`imagen ${image.titulo} `}
+                    style={{ maxWidth: '100px', maxHeight: '100px' }}
+                  />
+                }
+              </li>
             ))}
           </ul>
         </div>
