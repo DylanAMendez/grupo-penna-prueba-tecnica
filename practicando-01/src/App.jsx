@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 import './App.css'
 
@@ -13,20 +13,50 @@ function App()
   const [newNumero, setNewNumero] = useState('');
   const [newFecha, setNewFecha] = useState('');
 
+  const usersURL = 'http://localhost:3001/api/prueba/users'
+
+  //* useEffect
+  useEffect(() =>
+  {
+
+    obtenerDatosUsers()
+
+  }, [])
 
   //? función agregar nuevo usuario
-  const addUser = (event) => 
+  const addUser = async (event) => 
   {
-    event.preventDefault();
+    try {
+      event.preventDefault();
 
-    const userObject = {
-      nombre: newNombre,
-      apellido: newApellido,
-      numero: newNumero,
-      fecha: newFecha,
+      const userObject = {
+        nombre: newNombre,
+        apellido: newApellido,
+        numero: newNumero,
+        fecha: newFecha,
+      }
+
+      const options =
+      {
+        method: 'POST',
+        headers:
+        {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(userObject)
+      }
+
+      const response = await fetch(usersURL, options);
+      const data = await response.json();
+
+      console.log('user creado: ', data);
+
+      setUsers([...users, userObject]);
+
+    } catch (error) {
+      console.error('Error al enviar user ', error);
     }
 
-    setUsers([...users, userObject]);
   }
 
   const handleNombreChange = (event) => 
@@ -47,6 +77,14 @@ function App()
   const handleFechaChange = (event) => 
   {
     setNewFecha(event.target.value);
+  }
+
+
+  const obtenerDatosUsers = () => 
+  {
+    fetch(usersURL)
+      .then(response => response.json())
+      .then(data => console.log(data));
   }
 
 
@@ -115,7 +153,8 @@ function App()
     setImagePath(pathImage);
   }
 
-  console.log(newImage);
+  // console.log(newImage);
+
 
   return (
     <>
